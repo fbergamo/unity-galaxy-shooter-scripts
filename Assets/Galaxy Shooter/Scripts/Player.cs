@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-    public bool canTripleShot = true;
+    public bool canTripleShot = false;
 
     [SerializeField]
     private float _speed = 10f;
@@ -13,6 +13,8 @@ public class Player : MonoBehaviour {
     private float _shootSpeed = 0.4f;
     [SerializeField]
     private GameObject _laserPrefab;
+    [SerializeField]
+    private GameObject _laseripleShotPrefab;
     private float _nextShot = 0.0f;
 
     
@@ -33,11 +35,12 @@ public class Player : MonoBehaviour {
     {
         if (Input.GetKey(KeyCode.Space) && Time.time > _nextShot)
         {
-            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.4f, 0), Quaternion.identity);
-            if (canTripleShot)
+            if (!canTripleShot)
             {
-                Instantiate(_laserPrefab, transform.position + new Vector3(-0.785f, 0, 0), Quaternion.identity);
-                Instantiate(_laserPrefab, transform.position + new Vector3(0.785f, 0, 0), Quaternion.identity);
+                Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+            } else
+            {
+                Instantiate(_laseripleShotPrefab, transform.position, Quaternion.identity);
             }
             _nextShot = Time.time + _shootSpeed;
         }
