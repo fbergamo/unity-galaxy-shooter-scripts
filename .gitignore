@@ -259,3 +259,16 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/Assets/Galaxy Shooter/Audio
+/Assets/Galaxy Shooter/Materials/Shaders
+/Assets/Galaxy Shooter/Materials
+/Assets/Galaxy Shooter/Prefabs
+/Assets/Galaxy Shooter/Sprites
+/Assets/Galaxy Shooter/_Scenes
+/Library
+/ProjectSettings
+/Temp
+/UnityPackageManager
+/Galaxy Shooter.sln
+/Galaxy Shooter.csproj
+/.collabignore

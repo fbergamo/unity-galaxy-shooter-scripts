@@ -17,10 +17,12 @@ public class PowerUp : MonoBehaviour {
         if (other.tag.Equals("Player"))
         {
             Player player = other.GetComponent<Player>();
-            if (player != null) { 
-                player.canTripleShot = true;
-                Destroy(this.gameObject);
+            if (player != null) {  
+               player.TripleShotPowerUp();
+               Destroy(this.gameObject);
             }
         }
     }
+
+    
 }

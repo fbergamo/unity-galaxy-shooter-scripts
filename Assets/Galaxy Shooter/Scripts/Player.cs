@@ -37,7 +37,7 @@ public class Player : MonoBehaviour {
         {
             if (!canTripleShot)
             {
-                Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+                Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.4f, 0), Quaternion.identity);
             } else
             {
                 Instantiate(_laseripleShotPrefab, transform.position, Quaternion.identity);
@@ -78,5 +78,17 @@ public class Player : MonoBehaviour {
         {
             transform.position = new Vector3(transform.position.x, -verticalBound, transform.position.z);
         }
+    }
+
+    public void TripleShotPowerUp()
+    {
+        canTripleShot = true;
+        StartCoroutine(TripleShotPowerDownRoutine());
+    }
+
+    IEnumerator TripleShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        canTripleShot = false;
     }
 }
