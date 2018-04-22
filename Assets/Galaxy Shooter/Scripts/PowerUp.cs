@@ -6,7 +6,9 @@ public class PowerUp : MonoBehaviour {
 
     public float speed = 1f;
 
-	
+    [SerializeField]
+    private int powerupID;
+
 	// Update is called once per frame
 	void Update () {
         transform.Translate(Vector3.down * speed * Time.deltaTime);
@@ -18,8 +20,17 @@ public class PowerUp : MonoBehaviour {
         {
             Player player = other.GetComponent<Player>();
             if (player != null) {  
-               player.TripleShotPowerUp();
-               Destroy(this.gameObject);
+                if(powerupID == 0)
+                {
+                    player.TripleShotPowerUp();
+                } else if (powerupID == 1)
+                {
+                    player.SpeedPowerUp();
+                } else if (powerupID == 2)
+                {
+                    player.ShieldPowerUp();
+                }
+                Destroy(this.gameObject);
             }
         }
     }

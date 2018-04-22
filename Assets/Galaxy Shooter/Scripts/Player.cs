@@ -5,8 +5,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-    public bool canTripleShot = false;
-
+    [SerializeField]
+    private bool _canTripleShot = false;
+    [SerializeField]
+    private bool _canSpeed = false;
+    [SerializeField]
+    private bool _canShield = false;
+    [SerializeField]
+    private int hp = 3;
     [SerializeField]
     private float _speed = 10f;
     [SerializeField]
@@ -15,6 +21,10 @@ public class Player : MonoBehaviour {
     private GameObject _laserPrefab;
     [SerializeField]
     private GameObject _laseripleShotPrefab;
+    [SerializeField]
+    private GameObject _shieldGameObject;
+    [SerializeField]
+    private GameObject _playerExplosionPrefab;
     private float _nextShot = 0.0f;
 
     
@@ -29,13 +39,15 @@ public class Player : MonoBehaviour {
     {
         Movement();
         Shoot();
+
+        CheckHp();
     }
 
     private void Shoot()
     {
         if (Input.GetKey(KeyCode.Space) && Time.time > _nextShot)
         {
-            if (!canTripleShot)
+            if (!_canTripleShot)
             {
                 Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.4f, 0), Quaternion.identity);
             } else
@@ -50,10 +62,23 @@ public class Player : MonoBehaviour {
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-        transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * Time.deltaTime * _speed);
-
+        if (!_canSpeed) { 
+            transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * Time.deltaTime * _speed);
+        } else
+        {
+            transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * Time.deltaTime * _speed * 1.5f);
+        }
         checkVerticalBounds(5.6f);
         checkHorizontalBounds(12f);
+    }
+
+    private void CheckHp()
+    {
+        if(this.hp == 0)
+        {
+            Instantiate(_playerExplosionPrefab, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+        }
     }
 
     private void checkHorizontalBounds(float horizontalBound)
@@ -82,13 +107,46 @@ public class Player : MonoBehaviour {
 
     public void TripleShotPowerUp()
     {
-        canTripleShot = true;
+        _canTripleShot = true;
         StartCoroutine(TripleShotPowerDownRoutine());
     }
 
     IEnumerator TripleShotPowerDownRoutine()
     {
         yield return new WaitForSeconds(5f);
-        canTripleShot = false;
+        _canTripleShot = false;
     }
+
+    public void SpeedPowerUp()
+    {
+        _canSpeed = true;
+        StartCoroutine(SpeedPowerDownRoutine());
+    }
+
+    IEnumerator SpeedPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        _canSpeed = false;
+    }
+
+    public void ShieldPowerUp()
+    {
+        _canShield = true;
+        _shieldGameObject.SetActive(true);
+    }
+
+
+    public void  OnEnemyCollision()
+    {
+        if (!_canShield)
+        {
+            this.hp -= 1;
+        } else
+        {
+            _canShield = false;
+            _shieldGameObject.SetActive(false);
+        }
+    }
+
+
 }
