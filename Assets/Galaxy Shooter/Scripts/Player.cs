@@ -27,11 +27,22 @@ public class Player : MonoBehaviour {
     private GameObject _playerExplosionPrefab;
     private float _nextShot = 0.0f;
 
+    private UIManager _UIManager;
+    private GameManager _gameManager;
+    private SpawnManager _spawnManager;
     
 
     // Use this for initialization
     void Start () {
-        
+        _UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+
+        if (_spawnManager)
+        {
+            _spawnManager.StartSpawning();
+        }
+
     }
 	
 	// Update is called once per frame
@@ -74,9 +85,16 @@ public class Player : MonoBehaviour {
 
     private void CheckHp()
     {
-        if(this.hp == 0)
+        if (_UIManager != null)
+        {
+            _UIManager.UpdateLives(hp);
+        }
+
+        if (this.hp == 0)
         {
             Instantiate(_playerExplosionPrefab, transform.position, Quaternion.identity);
+            _gameManager.gameOver = true;
+            _UIManager.ShowTitleScreen(true);
             Destroy(this.gameObject);
         }
     }
